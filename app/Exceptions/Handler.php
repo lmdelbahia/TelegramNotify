@@ -33,12 +33,16 @@ class Handler extends ExceptionHandler
 
         $this->renderable(function (NotFoundHttpException $e, $request) {
             if ($e->getPrevious() instanceof ModelNotFoundException)
-                return response()->json(['message' => 'Data not found'], 404);
+                if ($request->ajax()) {
+                    return response()->json(['message' => __('messages.not_found')], 404);
+                }
         });
 
         $this->renderable(function (AccessDeniedHttpException $e, $request) {
             if ($e->getPrevious() instanceof AuthorizationException)
-                return response()->json(['message' => __($e->getMessage())], 403);
+                if ($request->ajax()) {
+                    return response()->json(['message' => __($e->getMessage())], 403);
+                }
         });
     }
 }

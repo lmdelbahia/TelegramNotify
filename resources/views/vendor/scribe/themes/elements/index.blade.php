@@ -16,15 +16,15 @@ use Knuckles\Scribe\Tools\WritingUtils as u;
 
     <script src="{{ asset('js/lodash.min.js') }}"></script>
 
-    <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.6.0/styles/docco.min.css">
-    <script src="https://unpkg.com/@highlightjs/cdn-assets@11.6.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="{{ asset('css/docco.min.css') }}">
+    <script src="{{ asset('js/highlight.min.js') }}"></script>
     <script>
         hljs.highlightAll();
     </script>
     <script type="module">
         import {
             CodeJar
-        } from 'https://medv.io/codejar/codejar.js'
+        } from "{{ asset('js/codejar.js') }}"
         window.CodeJar = CodeJar;
     </script>
 

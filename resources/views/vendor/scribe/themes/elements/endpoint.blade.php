@@ -234,7 +234,7 @@
                                                         Headers
                                                     </small>
                                                 </summary>
-                                                <pre><code class="language-http">@foreach($response->headers as $header => $value)
+                                                <pre><code class="">@foreach($response->headers as $header => $value)
                                                             {{ $header }}
                                                             : {{ is_array($value) ? implode('; ', $value) : $value }}
                                                         @endforeach </code></pre>

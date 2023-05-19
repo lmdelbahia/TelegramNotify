@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Helpers\FieldsOptions\RoleFieldOptions;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -47,7 +48,7 @@ class User extends Authenticatable
     ];
 
     //Scopes
-    public function scopeAdministrator(Builder $query): Builder
+    public function scopeAdmin(Builder $query): Builder
     {
         return $query->where('role', RoleFieldOptions::ADMIN->value);
     }
@@ -58,7 +59,7 @@ class User extends Authenticatable
     }
 
     //Helpers
-    public function isAdministrator(): bool
+    public function isAdmin(): bool
     {
         return $this->role == RoleFieldOptions::ADMIN->value;
     }
@@ -69,4 +70,8 @@ class User extends Authenticatable
     }
 
     //Relaciones
+    public function bots(): HasMany
+    {
+        return $this->hasMany(Bot::class);
+    }
 }

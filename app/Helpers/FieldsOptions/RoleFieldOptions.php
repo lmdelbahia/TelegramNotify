@@ -22,13 +22,13 @@ enum RoleFieldOptions: int implements BaseFunctionsFieldsOptions
     {
         $options = [];
         foreach (static::cases() as $case)
-            $options[] = array('key' => $case->value, 'value' => $case->label());
+            $options[] = array('value' => $case->value, 'label' => $case->label());
 
         return $options;
     }
 
     public function jsonSerialize(): mixed
     {
-        return array('key' => $this->value, 'value' => $this->label());
+        return array('value' => $this->value, 'label' => $this->label());
     }
 }
