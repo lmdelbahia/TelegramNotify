@@ -57,7 +57,7 @@ stdout_logfile=/home/forge/app.com/worker.log
 stopwaitsecs=3600  
   * numprocs son la cantidad de queues similtaneas ejecutandose y stopwaitsecs debe tener un valor en segundos suficiente para la ejecución de la queue mas larga  
 
-Creo que hasta aquí esta bien 😊  
+Creo que hasta aquí esta bien ☕  
 
 ## Code of Conduct
 
