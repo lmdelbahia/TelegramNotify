@@ -1,5 +1,5 @@
 <h2 align="center">Telegram Notify</h2>
-<h4 align="center">hecho con <a href="https://laravel.com" target="_blank">Laravel</a></h4>
+<h6 align="center">Hecho con <a href="https://laravel.com" target="_blank">Laravel</a></h6>
 
 <p align="center">
 <a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
