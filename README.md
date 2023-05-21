@@ -61,8 +61,8 @@ stopwaitsecs=3600
   * sudo supervisorctl reread
   * sudo supervisorctl update
   * sudo supervisorctl start name-ofworker:*
-- Genere la documentación de la API: php artisan scribe:generate
-- Deje optimizado el sistema para producción con siguiente comando: php artisan optimize  
+- Genere la documentación de la API: php artisan scribe:generate (Esto debe hacerlo cada vez que haya cambios en el código de la API)
+- Deje optimizado el sistema para producción con siguiente comando: php artisan optimize (Esto debe hacerlo cada vez que haya cambios en el código)
 
 Creo que hasta aquí esta bien ☕  
 
