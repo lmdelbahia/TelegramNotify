@@ -74,4 +74,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Bot::class);
     }
+
+    public function noticias(): HasMany
+    {
+        return $this->hasMany(Noticia::class);
+    }
 }

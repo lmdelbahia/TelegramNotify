@@ -13,7 +13,7 @@
 
 <div class="container-fluid text-center">
     <h3>
-        <small class="text-muted">{{ __('Noticia') }}</small>
+        <small class="text-muted">{{ __('Noticias') }}</small>
     </h3>
 </div>
 
@@ -41,7 +41,7 @@
                 <th>{{ __('Título') }}</th>
                 <th>{{ __('Creado') }}</th>
                 <th>{{ __('Actualizado') }}</th>
-                <th style="width: 128px">_____________</th>
+                <th style="width: 128px">__________________________</th>
             </tr>
         </thead>
         <tbody>
@@ -52,7 +52,7 @@
 
 <!-- Modal Operations -->
 <div class="modal fade" id="operationDialog" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="operationDialogTitle" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <form id="operationForm" name="operationForm" class="needs-validation" novalidate>
                 <div class="modal-header">
@@ -66,13 +66,51 @@
                         <label for="titulo">{{ __('Título') }}</label>
                         <div class="invalid-feedback">{{ __('messages.required_field') }}</div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group mb-3">
                         <label for="contenido">
                             {{ __('Contenido') }}
                             <i class="fas fa-question-circle text-info" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-bs-title="{{ __('Puede usar Markdown para el formato del contenido, ejemplo: ') }}<br/><strong>*bold text*</strong><br/><em>_italic text_</em><br/>[text](URL): <a href='#'>link<a/><br>`inline fixed-width code`<br/>```pre-formatted fixed-width code block```"></i>
                         </label>
                         <textarea class="form-control" id="contenido" name="contenido" rows="8" required></textarea>
                         <div class="invalid-feedback">{{ __('messages.required_field') }}</div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ __('Seleccione los destinos de sus Bots para publicar la noticia') }}</h5>
+                            <?php
+                            $rowBotClosed = true;
+                            foreach ($bots as $key => $bot) {
+                                $printBotRow = $key % 2;
+
+                                if ($printBotRow == 0) {
+                                    if (!$rowBotClosed) echo "</div>";
+                                    echo  "<div class='row'>";
+                                    $rowBotClosed = false;
+                                }
+                            ?>
+                                <div class="col">
+                                    <span class="fw-semibold">{{ $bot->name }}</span>
+                                    <div class="row">
+                                        <div class="col">
+                                            @if ($bot->botDestinations->count())
+                                            @foreach ($bot->botDestinations as $botDestination)
+                                            <div class="form-check form-switch mb-3 ml-3">
+                                                <input class="form-check-input" type="checkbox" role="switch" id="{{ 'flexSwitchCheckDefault' . $botDestination->id }}" name="botDestinations[]" value="{{ $botDestination->id }}">
+                                                <label class="form-check-label" for="{{ 'flexSwitchCheckDefault' . $botDestination->id }}">{{ $botDestination->name }}</label>
+                                            </div>
+                                            @endforeach
+                                            @else
+                                            <div class="text-warning-emphasis"><i class="fa-solid fa-plug-circle-minus"></i> {{ __('Sin destinos') }}</div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php
+                            }
+                            if (!$rowBotClosed) echo "</div>";
+                            ?>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -89,13 +127,57 @@
 
 <!-- Modal Details -->
 <div class="modal fade" id="detailsDialog" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="detailsDialogTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="detailsDialogTitle"></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body" id="detailsDialogBody"></div>
+            <div class="modal-body" id="detailsDialogBody">
+                <div class="card shadow rounded" style="min-height: 150px;">
+                    <div class="card-body">
+                        <p class="card-text" id="detailsDialogContent"></p>
+                    </div>
+                </div>
+
+                <div class="card shadow rounded" style="min-height: 150px;">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ __('Destinos de sus Bots para publicar la noticia') }}</h5>
+                        <?php
+                        $rowBotClosed = true;
+                        foreach ($bots as $key => $bot) {
+                            $printBotRow = $key % 2;
+
+                            if ($printBotRow == 0) {
+                                if (!$rowBotClosed) echo "</div>";
+                                echo  "<div class='row'>";
+                                $rowBotClosed = false;
+                            }
+                        ?>
+                            <div class="col">
+                                <span class="fw-semibold">{{ $bot->name }}</span>
+                                <div class="row">
+                                    <div class="col">
+                                        @if ($bot->botDestinations->count())
+                                        @foreach ($bot->botDestinations as $botDestination)
+                                        <div class="form-check form-switch mb-3 ml-3">
+                                            <input class="form-check-input" type="checkbox" role="switch" id="{{ 'switchCheckDetails' . $botDestination->id }}" disabled>
+                                            <label class="form-check-label" for="{{ 'switchCheckDetails' . $botDestination->id }}">{{ $botDestination->name }}</label>
+                                        </div>
+                                        @endforeach
+                                        @else
+                                        <div class="text-warning-emphasis"><i class="fa-solid fa-plug-circle-minus"></i> {{ __('Sin destinos') }}</div>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        <?php
+                        }
+                        if (!$rowBotClosed) echo "</div>";
+                        ?>
+                    </div>
+                </div>
+            </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('Cerrar') }}</button>
             </div>
@@ -113,7 +195,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('Cancelar') }}</button>
-                <button type="button" class="btn btn-danger" id="btnDelete" onclick="Asinc_Delete()">
+                <button type="button" class="btn btn-danger" id="btnDelete" onclick="Async_Delete()">
                     <span class="spinner-border spinner-border-sm" role="status" id="btnDeleteLoading"></span>
                     {{ __('Eliminar') }}
                 </button>
@@ -187,12 +269,22 @@
 
     function fillDetails(data) {
         $('#detailsDialogTitle').html("{{ __('Detalles') }} - " + data.titulo);
-        $('#detailsDialogBody').html(data.contenido);
+        $('#detailsDialogContent').html(data.contenido);
         $('#detailsDialog').modal('show');
+
+        $('#detailsDialogBody :checkbox').each(function(index, element) {
+            $(element).prop('checked', 0);
+        });
+
+        if (data.hasOwnProperty('bot_destinations')) {
+            Object.entries(data.bot_destinations).forEach(([key, botDestination]) => {
+                $('#switchCheckDetails' + botDestination.id).prop('checked', 1);
+            });
+        }
     }
 
 
-    function Asinc_Get(element) {
+    function Async_Get(element) {
         Limpiar();
         $.ajax({
             type: "GET",
@@ -208,11 +300,16 @@
                 $('#operationForm').autofill(response.data);
                 if ($(element).data('type') === "edit") {
                     FORM_CREATE = false;
+                    if (response.data.hasOwnProperty('bot_destinations')) {
+                        Object.entries(response.data.bot_destinations).forEach(([key, botDestination]) => {
+                            $('#flexSwitchCheckDefault' + botDestination.id).prop('checked', 1);
+                        });
+                    }
                     $('#operationDialog').modal('show');
                 } else if ($(element).data('type') === "details") {
                     fillDetails(response.data);
                 } else {
-                    $('#deleteDialogTitle').html("{{ __('Eliminar') }} - " + response.data.name);
+                    $('#deleteDialogTitle').html("{{ __('Eliminar') }} - " + response.data.titulo);
                     $('#deleteDialog').modal('show');
                 }
             },
@@ -234,7 +331,7 @@
         });
     }
 
-    function Asinc_Store() {
+    function Async_Store() {
         $.ajax({
             data: $('#operationForm').serialize(),
             type: "POST",
@@ -272,7 +369,7 @@
         });
     }
 
-    function Asinc_Update() {
+    function Async_Update() {
         $.ajax({
             data: $('#operationForm').serialize(),
             type: "PUT",
@@ -310,7 +407,39 @@
         });
     }
 
-    function Asinc_Delete() {
+    function Async_Send(element) {
+        $.ajax({
+            type: "GET",
+            dataType: "json",
+            beforeSend: function() {
+                $('#loadingContent').show();
+            },
+            complete: function() {
+                $('#loadingContent').hide();
+            },
+            url: "{{ route('noticia.index') }}" + '/send/' + $(element).data('id'),
+            success: function(response) {
+                AlertNotify('success', response.message)
+            },
+            error: function(xhr) {
+                if (xhr.responseJSON.errors) {
+                    let errores = xhr.responseJSON.errors;
+                    let messaje = "";
+                    for (let key in errores) {
+                        messaje += errores[key];
+                    }
+                    AlertNotify("error", messaje);
+                } else {
+                    AlertNotify("error", xhr.responseJSON.message);
+                }
+                if (xhr.status == 404) {
+                    table.draw();
+                }
+            }
+        });
+    }
+
+    function Async_Delete() {
         $.ajax({
             type: "DELETE",
             dataType: "json",
@@ -359,7 +488,7 @@
                     event.preventDefault();
                     event.stopPropagation();
                     if (form.checkValidity()) {
-                        FORM_CREATE ? Asinc_Store() : Asinc_Update();
+                        FORM_CREATE ? Async_Store() : Async_Update();
                     }
                     form.classList.add('was-validated');
                 }, false);

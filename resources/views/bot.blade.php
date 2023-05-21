@@ -15,7 +15,11 @@
     <h3>
         <small class="text-muted">{{ __('Bots de Telegram') }}</small>
     </h3>
-    <small class="text-body-secondary">{{ __('Puede crear un Bot solicitándoselo a') }} <a href="https://t.me/BotFather" target="__blank">@BotFather</a> </small>
+    <small class="text-body-secondary">
+        {{ __('Puede crear un Bot solicitándoselo a') }}
+        <a href="https://t.me/BotFather" target="__blank">@BotFather</a>
+        <i class="fas fa-question-circle text-info" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-bs-title="{{ __('Este es el método oficial para la creación de Bots, siga los pasos que le indica @BotFather y luego de creado el Bot añádalo a su Grupo o Canal con privilegios administrativos.') }}"></i>
+    </small>
 </div>
 
 <div class="container">
@@ -39,7 +43,6 @@
         <thead class="thead-dark">
             <tr>
                 <th>{{ __('No.') }}</th>
-                <th>{{ __('Usuario') }}</th>
                 <th>{{ __('Nombre') }}</th>
                 <th>{{ __('Token') }}</th>
                 <th style="width: 128px">_____________</th>
@@ -62,14 +65,6 @@
                 </div>
                 <div class="modal-body">
                     <input type="hidden" id="id" name="id">
-                    <div class="form-group mb-3">
-                        <label for="user_id">{{ __('Usuario') }}</label>
-                        <select class="form-select" id="user_id" name="user_id">
-                            @foreach ($users as $user)
-                            <option value="{{ $user->id }}">{{ $user->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control" id="name" name="name" maxlength="50" required placeholder="*">
                         <label for="name">{{ __('Nombre') }}</label>
@@ -103,7 +98,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('Cancelar') }}</button>
-                <button type="button" class="btn btn-danger" id="btnDelete" onclick="Asinc_Delete()">
+                <button type="button" class="btn btn-danger" id="btnDelete" onclick="Async_Delete()">
                     <span class="spinner-border spinner-border-sm" role="status" id="btnDeleteLoading"></span>
                     {{ __('Eliminar') }}
                 </button>
@@ -126,6 +121,7 @@
         $('#loadingContent').hide();
         $("#btnGuardarLoading").hide();
         $("#btnDeleteLoading").hide();
+        $('[data-bs-toggle="tooltip"]').tooltip();
 
         $.ajaxSetup({
             headers: {
@@ -144,10 +140,6 @@
             columns: [{
                     data: 'id',
                     name: 'id'
-                },
-                {
-                    data: 'user.name',
-                    name: 'user.name'
                 },
                 {
                     data: 'name',
@@ -174,7 +166,7 @@
         FORM_CREATE = true;
     }
 
-    function Asinc_Get(element) {
+    function Async_Get(element) {
         Limpiar();
         $.ajax({
             type: "GET",
@@ -214,7 +206,7 @@
         });
     }
 
-    function Asinc_Store() {
+    function Async_Store() {
         $.ajax({
             data: $('#operationForm').serialize(),
             type: "POST",
@@ -252,7 +244,7 @@
         });
     }
 
-    function Asinc_Update() {
+    function Async_Update() {
         $.ajax({
             data: $('#operationForm').serialize(),
             type: "PUT",
@@ -290,7 +282,7 @@
         });
     }
 
-    function Asinc_Delete() {
+    function Async_Delete() {
         $.ajax({
             type: "DELETE",
             dataType: "json",
@@ -339,7 +331,7 @@
                     event.preventDefault();
                     event.stopPropagation();
                     if (form.checkValidity()) {
-                        FORM_CREATE ? Asinc_Store() : Asinc_Update();
+                        FORM_CREATE ? Async_Store() : Async_Update();
                     }
                     form.classList.add('was-validated');
                 }, false);

@@ -50,9 +50,10 @@ class TelegramPhotoNotify extends Notification
     public function toTelegram($notifiable)
     {
         $path = storage_path("app/{$this->noticiaImagen->path}");
+        $descripcion = $this->noticiaImagen->descripcion ?? "";
         return TelegramFile::create()
             ->token($this->bot->token)
-            ->content("*{$this->noticiaImagen->descripcion}*")
+            ->content("*{$descripcion}*")
             ->photo($path); // local photo;
     }
 

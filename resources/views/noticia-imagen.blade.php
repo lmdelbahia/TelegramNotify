@@ -120,7 +120,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('Cancelar') }}</button>
-                <button type="button" class="btn btn-danger" id="btnDelete" onclick="Asinc_Delete()">
+                <button type="button" class="btn btn-danger" id="btnDelete" onclick="Async_Delete()">
                     <span class="spinner-border spinner-border-sm" role="status" id="btnDeleteLoading"></span>
                     {{ __('Eliminar') }}
                 </button>
@@ -300,7 +300,7 @@
 
     })
 
-    function Asinc_Get(element) {
+    function Async_Get(element) {
         $.ajax({
             type: "GET",
             dataType: "json",
@@ -336,7 +336,7 @@
         });
     }
 
-    function Asinc_Delete() {
+    function Async_Delete() {
         $.ajax({
             type: "DELETE",
             dataType: "json",
@@ -389,7 +389,7 @@
                     event.preventDefault();
                     event.stopPropagation();
                     if (form.checkValidity()) {
-                        FORM_CREATE ? Asinc_Store() : Asinc_Update();
+                        FORM_CREATE ? Async_Store() : Async_Update();
                     }
                     form.classList.add('was-validated');
                 }, false);

@@ -36,6 +36,7 @@ Route::middleware(['auth'])->group(function () {
     Route::apiResource('user', UserController::class);
 
     //Noticia
+    Route::get('noticia/send/{noticia}', [NoticiaController::class, 'send'])->name('noticia.send');
     Route::apiResource('noticia', NoticiaController::class)->parameters(['noticia' => 'noticia']);
 
     //Noticia - Imagen

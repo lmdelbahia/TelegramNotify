@@ -28,11 +28,11 @@ class BotDestinationController extends Controller
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
 
-                    $btn = '<a onClick="Asinc_Get(this)" data-id="' . $row->id . '" data-type="edit" class="btn btn-primary btn-sm" title="' . __('Editar') . '"><i class="fa-solid fa-edit"></i></a>';
+                    $btn = '<a onClick="Async_Get(this)" data-id="' . $row->id . '" data-type="edit" class="btn btn-primary btn-sm" title="' . __('Editar') . '"><i class="fa-solid fa-edit"></i></a>';
 
-                    $btn = $btn . ' <a onClick="Asinc_Test(this)" data-id="' . $row->id . '" data-type="test" class="btn btn-secondary btn-sm" title="' . __('Probar') . '"><i class="fa-solid fa-envelope-open-text"></i></a>';
+                    $btn = $btn . ' <a onClick="Async_Test(this)" data-id="' . $row->id . '" data-type="test" class="btn btn-light btn-sm" title="' . __('Probar') . '"><i class="fa-solid fa-paper-plane text-primary"></i></a>';
 
-                    $btn = $btn . ' <a onClick="Asinc_Get(this)" data-id="' . $row->id . '" data-type="delete" class="btn btn-danger btn-sm" title="' . __('Eliminar') . '"><i class="fa-solid fa-trash"></i></a>';
+                    $btn = $btn . ' <a onClick="Async_Get(this)" data-id="' . $row->id . '" data-type="delete" class="btn btn-danger btn-sm" title="' . __('Eliminar') . '"><i class="fa-solid fa-trash"></i></a>';
 
                     return $btn;
                 })
@@ -103,7 +103,7 @@ class BotDestinationController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Test the specified resource.
      */
     public function test(BotDestination $botDestination)
     {

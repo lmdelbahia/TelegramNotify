@@ -13,7 +13,7 @@ class NoticiaPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->isAdmin();
+        return $user->isAdmin() || $user->isClient();
     }
 
     /**
@@ -21,7 +21,7 @@ class NoticiaPolicy
      */
     public function view(User $user, Noticia $noticia): bool
     {
-        return $user->isAdmin();
+        return $noticia->user_id == $user->id;
     }
 
     /**
@@ -29,7 +29,7 @@ class NoticiaPolicy
      */
     public function create(User $user): bool
     {
-        return $user->isAdmin();
+        return $user->isAdmin() || $user->isClient();
     }
 
     /**
@@ -37,7 +37,7 @@ class NoticiaPolicy
      */
     public function update(User $user, Noticia $noticia): bool
     {
-        return $user->isAdmin();
+        return $noticia->user_id == $user->id;
     }
 
     /**
@@ -45,7 +45,7 @@ class NoticiaPolicy
      */
     public function delete(User $user, Noticia $noticia): bool
     {
-        return $user->isAdmin();
+        return $noticia->user_id == $user->id;
     }
 
     /**
@@ -53,7 +53,7 @@ class NoticiaPolicy
      */
     public function restore(User $user, Noticia $noticia): bool
     {
-        return $user->isAdmin();
+        return $noticia->user_id == $user->id;
     }
 
     /**
@@ -61,6 +61,14 @@ class NoticiaPolicy
      */
     public function forceDelete(User $user, Noticia $noticia): bool
     {
-        return $user->isAdmin();
+        return $noticia->user_id == $user->id;
+    }
+
+    /**
+     * Determine whether the user can send the model to Telegram.
+     */
+    public function send(User $user, Noticia $noticia): bool
+    {
+        return $noticia->user_id == $user->id;
     }
 }

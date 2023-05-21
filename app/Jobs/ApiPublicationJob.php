@@ -30,7 +30,7 @@ class ApiPublicationJob
      */
     public function __construct(User $user, Publication $publication)
     {
-        $this->user = $user;
+        $this->user = $user->withoutRelations();
         $this->publication = $publication;
     }
 

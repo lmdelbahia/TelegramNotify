@@ -8,6 +8,7 @@ use App\Models\Bot;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 
 class BotController extends Controller
@@ -20,17 +21,17 @@ class BotController extends Controller
         $this->authorize('viewAny', Bot::class);
 
         if ($request->ajax()) {
-            $data = Bot::query()->with('user');
+            $data = Auth::user()->bots();
             return DataTables::eloquent($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
                     $link = route('bot-destination.index', [$row->id]);
 
-                    $btn = '<a onClick="Asinc_Get(this)" data-id="' . $row->id . '" data-type="edit" class="btn btn-primary btn-sm" title="' . __('Editar') . '"><i class="fa-solid fa-edit"></i></a>';
+                    $btn = '<a onClick="Async_Get(this)" data-id="' . $row->id . '" data-type="edit" class="btn btn-primary btn-sm" title="' . __('Editar') . '"><i class="fa-solid fa-edit"></i></a>';
 
                     $btn = $btn . " <a href='{$link}'" . 'class="btn btn-secondary btn-sm" title="' . __('Destinos') . '"><i class="fa-solid fa-envelopes-bulk"></i></a>';
 
-                    $btn = $btn . ' <a onClick="Asinc_Get(this)" data-id="' . $row->id . '" data-type="delete" class="btn btn-danger btn-sm" title="' . __('Eliminar') . '"><i class="fa-solid fa-trash"></i></a>';
+                    $btn = $btn . ' <a onClick="Async_Get(this)" data-id="' . $row->id . '" data-type="delete" class="btn btn-danger btn-sm" title="' . __('Eliminar') . '"><i class="fa-solid fa-trash"></i></a>';
 
                     return $btn;
                 })
@@ -38,7 +39,7 @@ class BotController extends Controller
                 ->toJson();
         }
 
-        return view('bot', ['users' => User::select(['id', 'name'])->get()]);
+        return view('bot');
     }
 
     /**
@@ -49,7 +50,7 @@ class BotController extends Controller
         $this->authorize('create', Bot::class);
 
         Bot::create([
-            'user_id' => $request->user_id,
+            'user_id' => Auth::id(),
             'name' => $request->name,
             'token' => $request->token
         ]);
@@ -74,7 +75,6 @@ class BotController extends Controller
     {
         $this->authorize('update', $bot);
 
-        $bot->user_id =  $request->user_id;
         $bot->name =  $request->name;
         $bot->token =  $request->token;
         $bot->save();

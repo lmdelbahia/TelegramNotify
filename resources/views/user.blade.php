@@ -13,7 +13,7 @@
 
 <div class="container-fluid text-center">
     <h3>
-        <small class="text-muted">{{ __('Usuario') }}</small>
+        <small class="text-muted">{{ __('Usuarios') }}</small>
     </h3>
 </div>
 
@@ -123,7 +123,7 @@
                     <div class="form-group mb-3">
                         <input type="text" class="form-control" id="access_token" name="access_token" readonly>
                     </div>
-                    <button type="button" class="btn btn-dark" id="btnGenerate" onclick="Asinc_Generate_Token()">
+                    <button type="button" class="btn btn-dark" id="btnGenerate" onclick="Async_Generate_Token()">
                         <span class="spinner-border spinner-border-sm" role="status" id="btnGenerateLoading"></span>
                         {{ __('Generar') }}
                     </button>
@@ -146,7 +146,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('Cancelar') }}</button>
-                <button type="button" class="btn btn-danger" id="btnDelete" onclick="Asinc_Delete()">
+                <button type="button" class="btn btn-danger" id="btnDelete" onclick="Async_Delete()">
                     <span class="spinner-border spinner-border-sm" role="status" id="btnDeleteLoading"></span>
                     {{ __('Eliminar') }}
                 </button>
@@ -244,7 +244,7 @@
         }
     }
 
-    function Asinc_Get(element) {
+    function Async_Get(element) {
         Limpiar();
         $.ajax({
             type: "GET",
@@ -289,7 +289,7 @@
         });
     }
 
-    function Asinc_Store() {
+    function Async_Store() {
         $.ajax({
             data: $('#operationForm').serialize(),
             type: "POST",
@@ -327,7 +327,7 @@
         });
     }
 
-    function Asinc_Update() {
+    function Async_Update() {
         $.ajax({
             data: $('#operationForm').serialize(),
             type: "PUT",
@@ -365,7 +365,7 @@
         });
     }
 
-    function Asinc_Delete() {
+    function Async_Delete() {
         $.ajax({
             type: "DELETE",
             dataType: "json",
@@ -408,7 +408,7 @@
         $('#showDialog').modal('show');
     }
 
-    function Asinc_Generate_Token() {
+    function Async_Generate_Token() {
         $.ajax({
             type: "GET",
             dataType: "json",
@@ -451,7 +451,7 @@
                     event.preventDefault();
                     event.stopPropagation();
                     if (form.checkValidity()) {
-                        FORM_CREATE ? Asinc_Store() : Asinc_Update();
+                        FORM_CREATE ? Async_Store() : Async_Update();
                     }
                     form.classList.add('was-validated');
                 }, false);

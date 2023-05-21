@@ -13,7 +13,7 @@ class BotPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->isAdmin();
+        return $user->isAdmin() || $user->isClient();
     }
 
     /**
@@ -21,7 +21,7 @@ class BotPolicy
      */
     public function view(User $user, Bot $bot): bool
     {
-        return $user->isAdmin();
+        return $bot->user_id == $user->id;
     }
 
     /**
@@ -29,7 +29,7 @@ class BotPolicy
      */
     public function create(User $user): bool
     {
-        return $user->isAdmin();
+        return $user->isAdmin() || $user->isClient();
     }
 
     /**
@@ -37,7 +37,7 @@ class BotPolicy
      */
     public function update(User $user, Bot $bot): bool
     {
-        return $user->isAdmin();
+        return $bot->user_id == $user->id;
     }
 
     /**
@@ -45,7 +45,7 @@ class BotPolicy
      */
     public function delete(User $user, Bot $bot): bool
     {
-        return $user->isAdmin();
+        return $bot->user_id == $user->id;
     }
 
     /**
@@ -53,7 +53,7 @@ class BotPolicy
      */
     public function restore(User $user, Bot $bot): bool
     {
-        return $user->isAdmin();
+        return $bot->user_id == $user->id;
     }
 
     /**
@@ -61,6 +61,6 @@ class BotPolicy
      */
     public function forceDelete(User $user, Bot $bot): bool
     {
-        return $user->isAdmin();
+        return $bot->user_id == $user->id;
     }
 }

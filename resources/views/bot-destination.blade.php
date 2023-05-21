@@ -18,7 +18,11 @@
     <h3>
         <small class="text-muted">{{ __("Destinos del Bot de Telegram {$bot->name}") }}</small>
     </h3>
-    <small class="text-body-secondary">{{ __('Puede conocer el ID de su canal o grupo solicitándoselo a') }} <a href="https://t.me/myidbot" target="__blank">@myidbot</a> </small>
+    <small class="text-body-secondary">
+        {{ __('Puede conocer el ID de su canal o grupo solicitándoselo a') }}
+        <a href="https://t.me/myidbot" target="__blank">@myidbot</a>
+        <i class="fas fa-question-circle text-info" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-bs-title="{{ __('Este es un método no oficial pero seguro para conocer el ID de su canal o grupo para poder usarlo como destino, añada este Bot a su Canal o grupo con privilegios Administrativos comience a escribir con / y vera que se le muestran los comandos de @myidbot, use /getgroupid@myidbot y guarde el ID devuelto como destino. Puede revocar luego los privilegios de @myidbot.') }}"></i>
+    </small>
 </div>
 
 <div class="container">
@@ -100,7 +104,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('Cancelar') }}</button>
-                <button type="button" class="btn btn-danger" id="btnDelete" onclick="Asinc_Delete()">
+                <button type="button" class="btn btn-danger" id="btnDelete" onclick="Async_Delete()">
                     <span class="spinner-border spinner-border-sm" role="status" id="btnDeleteLoading"></span>
                     {{ __('Eliminar') }}
                 </button>
@@ -123,6 +127,7 @@
         $('#loadingContent').hide();
         $("#btnGuardarLoading").hide();
         $("#btnDeleteLoading").hide();
+        $('[data-bs-toggle="tooltip"]').tooltip();
 
         $.ajaxSetup({
             headers: {
@@ -175,7 +180,7 @@
         FORM_CREATE = true;
     }
 
-    function Asinc_Get(element) {
+    function Async_Get(element) {
         Limpiar();
         $.ajax({
             type: "GET",
@@ -215,7 +220,7 @@
         });
     }
 
-    function Asinc_Store() {
+    function Async_Store() {
         $.ajax({
             data: $('#operationForm').serialize(),
             type: "POST",
@@ -253,7 +258,7 @@
         });
     }
 
-    function Asinc_Update() {
+    function Async_Update() {
         $.ajax({
             data: $('#operationForm').serialize(),
             type: "PUT",
@@ -291,7 +296,7 @@
         });
     }
 
-    function Asinc_Delete() {
+    function Async_Delete() {
         $.ajax({
             type: "DELETE",
             dataType: "json",
@@ -328,8 +333,7 @@
         });
     }
 
-    function Asinc_Test(element) {
-        Limpiar();
+    function Async_Test(element) {
         $.ajax({
             type: "GET",
             dataType: "json",
@@ -373,7 +377,7 @@
                     event.preventDefault();
                     event.stopPropagation();
                     if (form.checkValidity()) {
-                        FORM_CREATE ? Asinc_Store() : Asinc_Update();
+                        FORM_CREATE ? Async_Store() : Async_Update();
                     }
                     form.classList.add('was-validated');
                 }, false);
