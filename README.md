@@ -58,9 +58,9 @@ stopwaitsecs=3600
   * numprocs son la cantidad de queues similtaneas ejecutandose y stopwaitsecs debe tener un valor en segundos suficiente para la ejecución de la queue mas larga  
 
 -  Cargue la configuración de supervisor e inicie el proceso con los siguientes comandos
-  * sudo supervisorctl reread  
-  * sudo supervisorctl update  
-  * sudo supervisorctl start name-ofworker:*  
+  * sudo supervisorctl reread
+  * sudo supervisorctl update
+  * sudo supervisorctl start name-ofworker:*
 - Genere la documentación de la API: php artisan scribe:generate
 - Deje optimizado el sistema para producción con siguiente comando: php artisan optimize  
 
