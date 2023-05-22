@@ -5,7 +5,9 @@ use App\Http\Controllers\BotDestinationController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NoticiaController;
 use App\Http\Controllers\NoticiaImagenController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserTokenController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -32,8 +34,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
 
     //Usuario    
-    Route::get('user/generate-token/{user}', [UserController::class, 'generateToken'])->name('user.generate-token');
     Route::apiResource('user', UserController::class);
+
+    //Token de Acceso a la API
+    Route::apiResource('user-token', UserTokenController::class)->except(['show', 'update'])->parameters(['user-token' => 'id']);
 
     //Noticia
     Route::get('noticia/send/{noticia}', [NoticiaController::class, 'send'])->name('noticia.send');
@@ -50,4 +54,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('bot-destination/list/{bot}', [BotDestinationController::class, 'index'])->name('bot-destination.index');
     Route::get('bot-destination/test/{bot_destination}', [BotDestinationController::class, 'test'])->name('bot-destination.test');
     Route::apiResource('bot-destination', BotDestinationController::class)->except(['index']);
+
+    //Profile
+    Route::apiResource('profile', ProfileController::class)->except(['show', 'update', 'destroy']);
 });

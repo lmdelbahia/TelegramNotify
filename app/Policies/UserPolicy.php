@@ -70,12 +70,4 @@ class UserPolicy
     {
         return $user->isAdmin();
     }
-
-    /**
-     * Determine whether the user can create the model.
-     */
-    public function generateToken(User $user, User $model): bool
-    {
-        return $user->isAdmin();
-    }
 }

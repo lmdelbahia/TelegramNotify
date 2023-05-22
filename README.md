@@ -33,8 +33,8 @@ Cree su entorno de producción a partir de una pila LAMP. Luego de configurado e
   * GD PHP Extension
   * JSON PHP Extension      
 - Colóquese en la raíz del proyecto.
-- Ejecutar composer install (antes de este paso borre el composer.lock).
-- Realizar las configuraciones pertinentes en el archivo .env, de no existir copiar del archivo de ejemplo el contenido (.env.example)
+- Ejecutar composer install --optimize-autoloader --no-dev (antes de este paso borre el composer.lock).
+- Realizar las configuraciones pertinentes en el archivo .env, de no existir copiar del archivo de ejemplo el contenido (.env.example). Asegurarse de que las variables APP_ENV=production y APP_DEBUG=false
 - Si no tiene una llave en APP_KEY ejecute: php artisan key:generate
 - Ejecutar php artisan migrate.
 - Ejecutar php artisan db:seed --class=InitialDataSeeder. El usuario por defecto es admintelnotify@example.com con passwd admin*2023
@@ -57,7 +57,7 @@ stdout_logfile=/home/forge/app.com/worker.log
 stopwaitsecs=3600  
   * numprocs son la cantidad de queues similtaneas ejecutandose y stopwaitsecs debe tener un valor en segundos suficiente para la ejecución de la queue mas larga  
 
--  Cargue la configuración de supervisor e inicie el proceso con los siguientes comandos
+-  Cargue la configuración de supervisor e inicie el proceso con los siguientes comandos:
   * sudo supervisorctl reread
   * sudo supervisorctl update
   * sudo supervisorctl start name-ofworker:*

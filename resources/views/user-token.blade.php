@@ -6,14 +6,13 @@
 
 @section('extra-js')
 <script type="text/javascript" src="{{ asset('js/datatables.min.js') }}"></script>
-<script type="text/javascript" src="{{ asset('js/jquery.formautofill.min.js') }}"></script>
 @endsection
 
 @section('content')
 
 <div class="container-fluid text-center">
     <h3>
-        <small class="text-muted">{{ __('Usuarios') }}</small>
+        <small class="text-muted">{{ __('Tokens de Acceso a la API') }}</small>
     </h3>
 </div>
 
@@ -34,16 +33,14 @@
     </div>
 
     <table id="dtContent" class="table table-striped table-bordered table-hover text-center shadow dt-responsive nowrap data-table">
-        <caption>{{ __('Listado de Usuarios') }}</caption>
+        <caption>{{ __('Listado de Tokens de Acceso a la API') }}</caption>
         <thead class="thead-dark">
             <tr>
                 <th>{{ __('No.') }}</th>
                 <th>{{ __('Nombre') }}</th>
-                <th>{{ __('Correo') }}</th>
-                <th>{{ __('Rol') }}</th>
                 <th>{{ __('Creado') }}</th>
-                <th>{{ __('Actualizado') }}</th>
-                <th style="width: 128px">_____________</th>
+                <th>{{ __('Último uso') }}</th>
+                <th style="width: 64px">_________</th>
             </tr>
         </thead>
         <tbody>
@@ -54,55 +51,30 @@
 
 <!-- Modal Operations -->
 <div class="modal fade" id="operationDialog" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="operationDialogTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <form id="operationForm" name="operationForm" class="needs-validation" novalidate>
                 <div class="modal-header">
-                    <h5 class="modal-title" id="operationDialogTitle">{{ __('Usuario') }}</h5>
+                    <h5 class="modal-title" id="operationDialogTitle">{{ __('Token de Acceso') }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <input type="hidden" id="id" name="id">
                     <div class="form-floating mb-3">
-                        <input type="text" class="form-control" id="name" name="name" maxlength="255" required placeholder="*">
+                        <input type="text" class="form-control" id="name" name="name" maxlength="80" required placeholder="*">
                         <label for="name">{{ __('Nombre') }}</label>
                         <div class="invalid-feedback">{{ __('messages.required_field') }}</div>
                     </div>
                     <div class="form-floating mb-3">
-                        <input type="email" class="form-control" id="email" name="email" maxlength="255" required placeholder="*">
-                        <label for="email">{{ __('Correo') }}</label>
-                        <div class="invalid-feedback">{{ __('messages.required_field') . ' ' . __('messages.email_field') }}</div>
-                    </div>
-                    <div class="form-check form-switch my-3" id="fcbxChangePasswd">
-                        <input class="form-check-input" type="checkbox" id="cbxChangePassword" name="cbxChangePassword" onchange="togglePasswordFields()">
-                        <label class="form-check-label" for="cbxChangePassword">{{ __('Cambiar la Contraseña') }}</label>
-                    </div>
-                    <div id="passwordFields">
-                        <div class="form-floating mb-3">
-                            <input type="password" class="form-control" id="password" name="password" maxlength="255" placeholder="*">
-                            <label for="password">{{ __('Contraseña') }}</label>
-                            <div class="invalid-feedback">{{ __('messages.required_field') }}</div>
-                        </div>
-                        <div class="form-floating mb-3">
-                            <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" maxlength="255" placeholder="*">
-                            <label for="password_confirmation">{{ __('Confirmar Contraseña') }}</label>
-                            <div class="invalid-feedback">{{ __('messages.required_field') }}</div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="role">{{ __('Rol') }}</label>
-                        <select class="form-select" id="role" name="role">
-                            @foreach ($roles as $role)
-                            <option value="{{ $role['value'] }}">{{ $role['label'] }}</option>
-                            @endforeach
-                        </select>
+                        <input type="text" class="form-control" id="access_token" name="access_token" maxlength="255" placeholder="*" readonly>
+                        <label for="name">{{ __('Token de Acceso') }}</label>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('Cerrar') }}</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="Limpiar()">{{ __('Cerrar') }}</button>
                     <button type="submit" class="btn btn-primary" id="btnGuardar">
                         <span class="spinner-border spinner-border-sm" role="status" id="btnGuardarLoading"></span>
-                        {{ __('Guardar') }}
+                        {{ __('Generar') }}
                     </button>
                 </div>
             </form>
@@ -131,19 +103,17 @@
 
 
 <script type="text/javascript">
-    document.title = "{{ __('Gestionar Usuarios') }}";
-    var FORM_CREATE = true;
+    document.title = "{{ __('Gestionar Tokens de Acceso a la API') }}";
     //DataTable Object
     var table;
 
     $(function() {
         $("ul#administrar-nav").addClass("show");
-        $("a#administrar-nav-user").addClass("active");
+        $("a#administrar-nav-user-token").addClass("active");
         //Spinners de carga
         $('#loadingContent').hide();
         $("#btnGuardarLoading").hide();
         $("#btnDeleteLoading").hide();
-        $("#btnGenerateLoading").hide();
 
         $.ajaxSetup({
             headers: {
@@ -158,7 +128,7 @@
             language: {
                 url: "{{ asset('i18n/es-ES.DataTables.json') }}",
             },
-            ajax: "{{ route('user.index') }}",
+            ajax: "{{ route('user-token.index') }}",
             columns: [{
                     data: 'id',
                     name: 'id'
@@ -168,20 +138,12 @@
                     name: 'name'
                 },
                 {
-                    data: 'email',
-                    name: 'email'
-                },
-                {
-                    data: 'role',
-                    name: 'role'
-                },
-                {
                     data: 'created_at',
                     name: 'created_at'
                 },
                 {
-                    data: 'updated_at',
-                    name: 'updated_at'
+                    data: 'last_used_at',
+                    name: 'last_used_at'
                 },
                 {
                     data: 'action',
@@ -197,69 +159,6 @@
         $('#id').val('');
         $('#operationForm').trigger("reset");
         $('#operationForm').removeClass("was-validated");
-        $('#password').prop('required', true);
-        $('#password_confirmation').prop('required', true);
-        $('#fcbxChangePasswd').hide();
-        $('#cbxChangePassword').prop('checked', 1);
-        $('#passwordFields').slideDown();
-        FORM_CREATE = true;
-    }
-
-    function togglePasswordFields() {
-        if ($('#cbxChangePassword').prop('checked')) {
-            $('#passwordFields').slideDown();
-            $('#password').prop('required', true);
-            $('#password_confirmation').prop('required', true);
-        } else {
-            $('#password').prop('required', false);
-            $('#password_confirmation').prop('required', false);
-            $('#passwordFields').slideUp();
-        }
-    }
-
-    function Async_Get(element) {
-        Limpiar();
-        $.ajax({
-            type: "GET",
-            dataType: "json",
-            beforeSend: function() {
-                $('#loadingContent').show();
-            },
-            complete: function() {
-                $('#loadingContent').hide();
-            },
-            url: "{{ route('user.index') }}" + '/' + $(element).data('id'),
-            success: function(response) {
-                $('#operationForm').autofill(response.data);
-                if ($(element).data('type') === "edit") {
-                    $('#fcbxChangePasswd').show();
-                    $('#cbxChangePassword').prop('checked', 0);
-                    $('#passwordFields').slideUp();
-                    $('#password').prop('required', false);
-                    $('#password_confirmation').prop('required', false);
-                    FORM_CREATE = false;
-                    $('#operationDialog').modal('show');
-                } else {
-                    $('#deleteDialogTitle').html("{{ __('Eliminar') }} - " + response.data.name);
-                    $('#deleteDialog').modal('show');
-                }
-            },
-            error: function(xhr) {
-                if (xhr.responseJSON.errors) {
-                    let errores = xhr.responseJSON.errors;
-                    let messaje = "";
-                    for (let key in errores) {
-                        messaje += errores[key];
-                    }
-                    AlertNotify("error", messaje);
-                } else {
-                    AlertNotify("error", xhr.responseJSON.message);
-                }
-                if (xhr.status == 404) {
-                    table.draw();
-                }
-            }
-        });
     }
 
     function Async_Store() {
@@ -275,11 +174,9 @@
                 $('#btnGuardar').attr("disabled", false);
                 $("#btnGuardarLoading").hide();
             },
-            url: "{{ route('user.index') }}",
+            url: "{{ route('user-token.index') }}",
             success: function(response) {
-                $('#operationDialog').modal('hide');
-                Limpiar();
-                AlertNotify("success", response.message);
+                $('#access_token').val(response.data.token);
                 table.draw();
             },
             error: function(xhr) {
@@ -300,49 +197,11 @@
         });
     }
 
-    function Async_Update() {
-        $.ajax({
-            data: $('#operationForm').serialize(),
-            type: "PUT",
-            dataType: "json",
-            beforeSend: function() {
-                $('#btnGuardar').attr("disabled", true);
-                $("#btnGuardarLoading").show();
-            },
-            complete: function() {
-                $('#btnGuardar').attr("disabled", false);
-                $("#btnGuardarLoading").hide();
-            },
-            url: "{{ route('user.index') }}" + '/' + $('#id').val(),
-            success: function(response) {
-                $('#operationDialog').modal('hide');
-                Limpiar();
-                AlertNotify("success", response.message);
-                table.draw();
-            },
-            error: function(xhr) {
-                if (xhr.responseJSON.errors) {
-                    let errores = xhr.responseJSON.errors;
-                    let messaje = "";
-                    for (let key in errores) {
-                        messaje += errores[key];
-                    }
-                    AlertNotify("error", messaje);
-                } else {
-                    AlertNotify("error", xhr.responseJSON.message);
-                }
-                if (xhr.status == 404) {
-                    table.draw();
-                }
-            }
-        });
-    }
-
-    function Async_Delete() {
+    function Async_Delete(element) {
         $.ajax({
             type: "DELETE",
             dataType: "json",
-            url: "{{ route('user.index') }}" + '/' + $('#id').val(),
+            url: "{{ route('user-token.index') }}" + '/' + $(element).data('id'),
             beforeSend: function() {
                 $('#btnDelete').attr("disabled", true);
                 $("#btnDeleteLoading").show();
@@ -387,7 +246,7 @@
                     event.preventDefault();
                     event.stopPropagation();
                     if (form.checkValidity()) {
-                        FORM_CREATE ? Async_Store() : Async_Update();
+                        Async_Store();
                     }
                     form.classList.add('was-validated');
                 }, false);

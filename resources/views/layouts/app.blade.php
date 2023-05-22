@@ -98,7 +98,7 @@
                         </li>
 
                         <li>
-                            <a class="dropdown-item d-flex align-items-center" href="#">
+                            <a class="dropdown-item d-flex align-items-center" href="{{ route('profile.index') }}">
                                 <i class="fa-solid fa-gear"></i>
                                 <span>{{ __('Ajustes de la cuenta') }}</span>
                             </a>
@@ -147,6 +147,11 @@
                         </a>
                     </li>
                     @endcan
+                    <li>
+                        <a href="{{ route('user-token.index') }}" id="administrar-nav-user-token">
+                            <i class="fa-solid fa-circle"></i><span>Tokens de Acceso - API</span>
+                        </a>
+                    </li>
                     @can('viewAny', App\Models\Bot::class)
                     <li>
                         <a href="{{ route('bot.index') }}" id="administrar-nav-bot">
