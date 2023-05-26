@@ -201,7 +201,7 @@
             <!-- You can delete the links only if you purchased the pro version. -->
             <!-- Licensing information: https://bootstrapmade.com/license/ -->
             <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-            Diseñado por <a href="https://bootstrapmade.com/">BootstrapMade</a> y <a href="https://github.com/miguelalejandrog29">El Matatán</a>
+            Diseñado por <a href="https://bootstrapmade.com/">BootstrapMade</a>
         </div>
     </footer><!-- End Footer -->
 
