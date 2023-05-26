@@ -13,7 +13,7 @@
 
 <div class="container-fluid text-center">
     <h3>
-        <small class="text-muted">{{ __('Noticias') }}</small>
+        <small class="text-muted">{{ __('Encuestas') }}</small>
     </h3>
 </div>
 
@@ -34,7 +34,7 @@
     </div>
 
     <table id="dtContent" class="table table-striped table-bordered table-hover text-center shadow dt-responsive nowrap data-table">
-        <caption>{{ __('Listado de Noticias') }}</caption>
+        <caption>{{ __('Listado de Encuestas') }}</caption>
         <thead class="thead-dark">
             <tr>
                 <th>{{ __('No.') }}</th>
@@ -67,17 +67,17 @@
                         <div class="invalid-feedback">{{ __('messages.required_field') }}</div>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="contenido">
-                            {{ __('Contenido') }}
-                            <i class="fas fa-question-circle text-info" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-bs-title="{{ __('Puede usar Markdown para el formato del contenido, ejemplo: ') }}<br/><strong>*bold text*</strong><br/><em>_italic text_</em><br/>[text](URL): <a href='#'>link<a/><br>`inline fixed-width code`<br/>```pre-formatted fixed-width code block```"></i>
+                        <label for="opciones">
+                            {{ __('Opciones') }}
+                            <i class="fas fa-question-circle text-info" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-bs-title="{{ __('Debe separar cada opción por **') }}"></i>
                         </label>
-                        <textarea class="form-control" id="contenido" name="contenido" rows="8" required></textarea>
+                        <textarea class="form-control" id="opciones" name="opciones" rows="8" required></textarea>
                         <div class="invalid-feedback">{{ __('messages.required_field') }}</div>
                     </div>
 
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">{{ __('Seleccione los destinos de sus Bots para publicar la noticia') }}</h5>
+                            <h5 class="card-title">{{ __('Seleccione los destinos de sus Bots para publicar la encuesta') }}</h5>
                             <?php
                             $rowBotClosed = true;
                             foreach ($bots as $key => $bot) {
@@ -142,7 +142,7 @@
 
                 <div class="card shadow rounded" style="min-height: 150px;">
                     <div class="card-body">
-                        <h5 class="card-title">{{ __('Destinos de sus Bots para publicar la noticia') }}</h5>
+                        <h5 class="card-title">{{ __('Destinos de sus Bots para publicar la encuesta') }}</h5>
                         <?php
                         $rowBotClosed = true;
                         foreach ($bots as $key => $bot) {
@@ -206,14 +206,14 @@
 
 
 <script type="text/javascript">
-    document.title = "{{ __('Gestionar Noticias') }}";
+    document.title = "{{ __('Gestionar Encuestas') }}";
     var FORM_CREATE = true;
     //DataTable Object
     var table;
 
     $(function() {
         $("ul#administrar-nav").addClass("show");
-        $("a#administrar-nav-noticia").addClass("active");
+        $("a#administrar-nav-encuesta").addClass("active");
         //Spinners de carga
         $('#loadingContent').hide();
         $("#btnGuardarLoading").hide();
@@ -233,7 +233,7 @@
             language: {
                 url: "{{ asset('i18n/es-ES.DataTables.json') }}",
             },
-            ajax: "{{ route('noticia.index') }}",
+            ajax: "{{ route('encuesta.index') }}",
             columns: [{
                     data: 'id',
                     name: 'id'
@@ -269,7 +269,7 @@
 
     function fillDetails(data) {
         $('#detailsDialogTitle').html("{{ __('Detalles') }} - " + data.titulo);
-        $('#detailsDialogContent').html(data.contenido);
+        $('#detailsDialogContent').html(data.opciones);
         $('#detailsDialog').modal('show');
 
         $('#detailsDialogBody :checkbox').each(function(index, element) {
@@ -295,7 +295,7 @@
             complete: function() {
                 $('#loadingContent').hide();
             },
-            url: "{{ route('noticia.index') }}" + '/' + $(element).data('id'),
+            url: "{{ route('encuesta.index') }}" + '/' + $(element).data('id'),
             success: function(response) {
                 $('#operationForm').autofill(response.data);
                 if ($(element).data('type') === "edit") {
@@ -344,7 +344,7 @@
                 $('#btnGuardar').attr("disabled", false);
                 $("#btnGuardarLoading").hide();
             },
-            url: "{{ route('noticia.index') }}",
+            url: "{{ route('encuesta.index') }}",
             success: function(response) {
                 $('#operationDialog').modal('hide');
                 Limpiar();
@@ -382,7 +382,7 @@
                 $('#btnGuardar').attr("disabled", false);
                 $("#btnGuardarLoading").hide();
             },
-            url: "{{ route('noticia.index') }}" + '/' + $('#id').val(),
+            url: "{{ route('encuesta.index') }}" + '/' + $('#id').val(),
             success: function(response) {
                 $('#operationDialog').modal('hide');
                 Limpiar();
@@ -409,7 +409,7 @@
 
     function Async_Send(element) {
         Swal.fire({
-            title: "¿{{ __('Realmente desea publicar la noticia: ') }} " + $(element).data('titulo') + "?",
+            title: "¿{{ __('Realmente desea publicar la encuesta: ') }} " + $(element).data('titulo') + "?",
             showCancelButton: true,
             confirmButtonText: "{{ __('Enviar') }}",
             cancelButtonText: "{{ __('Cancelar') }}",
@@ -425,7 +425,7 @@
                     complete: function() {
                         $('#loadingContent').hide();
                     },
-                    url: "{{ route('noticia.index') }}" + '/send/' + $(element).data('id'),
+                    url: "{{ route('encuesta.index') }}" + '/send/' + $(element).data('id'),
                     success: function(response) {
                         AlertNotify('success', response.message)
                     },
@@ -453,7 +453,7 @@
         $.ajax({
             type: "DELETE",
             dataType: "json",
-            url: "{{ route('noticia.index') }}" + '/' + $('#id').val(),
+            url: "{{ route('encuesta.index') }}" + '/' + $('#id').val(),
             beforeSend: function() {
                 $('#btnDelete').attr("disabled", true);
                 $("#btnDeleteLoading").show();

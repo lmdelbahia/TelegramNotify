@@ -3,8 +3,10 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
-class StorePublicationRequest extends FormRequest
+class PublishToBotsRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,10 +23,25 @@ class StorePublicationRequest extends FormRequest
      */
     public function rules(): array
     {
+        $userId = Auth::id();
+
         return [
             'titulo' => ['required', 'string', 'max:80'],
             'contenido' => ['required', 'string'],
-            'image_path' => ['required', 'image'],
+            'image' => ['required', 'image'],
+            'bots' => ['required', 'array'],
+            'bots.*' => [
+                'required',
+                'integer',
+                Rule::exists('bots', 'id')->where('user_id', $userId)
+            ]
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'bots.*.exists' => 'Este Bot no le pertenece'
         ];
     }
 }

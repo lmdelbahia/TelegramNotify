@@ -2,13 +2,12 @@
 
 namespace Database\Factories;
 
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Bot>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Encuesta>
  */
-class BotFactory extends Factory
+class EncuestaFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,9 +17,7 @@ class BotFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => User::all()->random(),
-            'name' => fake()->name(),
-            'token' => fake()->word()
+            //
         ];
     }
 }

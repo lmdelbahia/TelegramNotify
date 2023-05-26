@@ -55,7 +55,7 @@ numprocs=1
 redirect_stderr=true  
 stdout_logfile=/home/forge/app.com/worker.log  
 stopwaitsecs=3600  
-  * numprocs son la cantidad de queues similtaneas ejecutandose y stopwaitsecs debe tener un valor en segundos suficiente para la ejecución de la queue mas larga  
+  * numprocs son la cantidad de queues simultaneas ejecutandose y stopwaitsecs debe tener un valor en segundos suficiente para la ejecución de la queue mas larga  
 
 -  Cargue la configuración de supervisor e inicie el proceso con los siguientes comandos:
   * sudo supervisorctl reread

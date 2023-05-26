@@ -198,40 +198,52 @@
     }
 
     function Async_Delete(element) {
-        $.ajax({
-            type: "DELETE",
-            dataType: "json",
-            url: "{{ route('user-token.index') }}" + '/' + $(element).data('id'),
-            beforeSend: function() {
-                $('#btnDelete').attr("disabled", true);
-                $("#btnDeleteLoading").show();
-            },
-            complete: function() {
-                $('#btnDelete').attr("disabled", false);
-                $("#btnDeleteLoading").hide();
-            },
-            success: function(data) {
-                $('#deleteDialog').modal('hide');
-                Limpiar();
-                AlertNotify("success", data.message);
-                table.draw();
-            },
-            error: function(xhr) {
-                if (xhr.responseJSON.errors) {
-                    let errores = xhr.responseJSON.errors;
-                    let message = "";
-                    for (let key in errores) {
-                        message += errores[key];
+        Swal.fire({
+            title: "{{ __('Eliminar') }} - " + $(element).data('name'),
+            showConfirmButton: false,
+            showDenyButton: true,
+            showCancelButton: true,
+            denyButtonText: "{{ __('Eliminar') }}",
+            cancelButtonText: "{{ __('Cancelar') }}",
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isDenied) {
+                $.ajax({
+                    type: "DELETE",
+                    dataType: "json",
+                    url: "{{ route('user-token.index') }}" + '/' + $(element).data('id'),
+                    beforeSend: function() {
+                        $('#btnDelete').attr("disabled", true);
+                        $("#btnDeleteLoading").show();
+                    },
+                    complete: function() {
+                        $('#btnDelete').attr("disabled", false);
+                        $("#btnDeleteLoading").hide();
+                    },
+                    success: function(data) {
+                        $('#deleteDialog').modal('hide');
+                        Limpiar();
+                        AlertNotify("success", data.message);
+                        table.draw();
+                    },
+                    error: function(xhr) {
+                        if (xhr.responseJSON.errors) {
+                            let errores = xhr.responseJSON.errors;
+                            let message = "";
+                            for (let key in errores) {
+                                message += errores[key];
+                            }
+                            AlertNotify("error", message);
+                        } else {
+                            AlertNotify("error", xhr.responseJSON.message);
+                        }
+                        if (xhr.status == 404) {
+                            table.draw();
+                        }
                     }
-                    AlertNotify("error", message);
-                } else {
-                    AlertNotify("error", xhr.responseJSON.message);
-                }
-                if (xhr.status == 404) {
-                    table.draw();
-                }
+                });
             }
-        });
+        })
     }
 
     // Deshabilita Form Submit en casi de campo no válido

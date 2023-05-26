@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BotController;
 use App\Http\Controllers\BotDestinationController;
+use App\Http\Controllers\EncuestaController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NoticiaController;
 use App\Http\Controllers\NoticiaImagenController;
@@ -56,5 +57,11 @@ Route::middleware(['auth'])->group(function () {
     Route::apiResource('bot-destination', BotDestinationController::class)->except(['index']);
 
     //Profile
-    Route::apiResource('profile', ProfileController::class)->except(['show', 'update', 'destroy']);
+    Route::get('profile', [ProfileController::class, 'index'])->name('profile.index');
+    Route::post('profile-update', [ProfileController::class, 'update'])->name('profile.update');
+    Route::post('profile-change-password', [ProfileController::class, 'changePassword'])->name('profile.change-password');
+
+    //Encuesta
+    Route::get('encuesta/send/{encuesta}', [EncuestaController::class, 'send'])->name('encuesta.send');
+    Route::apiResource('encuesta', EncuestaController::class)->parameters(['encuesta' => 'encuesta']);
 });

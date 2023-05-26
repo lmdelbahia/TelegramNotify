@@ -12,6 +12,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 
 class SendNoticiaJob implements ShouldQueue
@@ -36,12 +37,21 @@ class SendNoticiaJob implements ShouldQueue
         $this->noticia->load(['botDestinations.bot', 'imagenes']);
 
         foreach ($this->noticia->botDestinations as $botDestination) {
-            Notification::route('telegram', $botDestination->identifier)
-                ->notify(new TelegramMessageNotify($botDestination->bot, $this->noticia));
+            try {
+                Notification::route('telegram', $botDestination->identifier)
+                    ->notify(new TelegramMessageNotify($botDestination->bot, $this->noticia));
+            } catch (\Throwable $th) {
+                Log::error($th);
+            }
+
 
             foreach ($this->noticia->imagenes as $imagen) {
-                Notification::route('telegram', $botDestination->identifier)
-                    ->notify(new TelegramPhotoNotify($botDestination->bot, $imagen));
+                try {
+                    Notification::route('telegram', $botDestination->identifier)
+                        ->notify(new TelegramPhotoNotify($botDestination->bot, $imagen));
+                } catch (\Throwable $th) {
+                    Log::error($th);
+                }
             }
         }
     }

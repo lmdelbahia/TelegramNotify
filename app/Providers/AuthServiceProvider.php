@@ -6,11 +6,13 @@ namespace App\Providers;
 
 use App\Models\Bot;
 use App\Models\BotDestination;
+use App\Models\Encuesta;
 use App\Models\Noticia;
 use App\Models\NoticiaImagen;
 use App\Models\User;
 use App\Policies\BotDestinationPolicy;
 use App\Policies\BotPolicy;
+use App\Policies\EncuestaPolicy;
 use App\Policies\NoticiaImagenPolicy;
 use App\Policies\NoticiaPolicy;
 use App\Policies\UserPolicy;
@@ -28,7 +30,8 @@ class AuthServiceProvider extends ServiceProvider
         Noticia::class => NoticiaPolicy::class,
         NoticiaImagen::class => NoticiaImagenPolicy::class,
         Bot::class => BotPolicy::class,
-        BotDestination::class => BotDestinationPolicy::class
+        BotDestination::class => BotDestinationPolicy::class,
+        Encuesta::class => EncuestaPolicy::class
     ];
 
     /**

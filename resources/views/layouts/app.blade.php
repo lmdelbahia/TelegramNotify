@@ -85,8 +85,8 @@
 
                     <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
                         <i class="fa-solid fa-user-tie"></i>
-                        <span class="d-none d-md-block dropdown-toggle ps-2">{{ Auth::user()->name }}</span>
-                    </a><!-- End Profile Iamge Icon -->
+                        <span class="d-none d-md-block dropdown-toggle ps-2" id="app-menu-user-name">{{ Auth::user()->name }}</span>
+                    </a><!-- End Profile Image Icon -->
 
                     <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                         <li class="dropdown-header">
@@ -163,6 +163,13 @@
                     <li>
                         <a href="{{ route('noticia.index') }}" id="administrar-nav-noticia">
                             <i class="fa-solid fa-circle"></i><span>Noticias</span>
+                        </a>
+                    </li>
+                    @endcan
+                    @can('viewAny', App\Models\Encuesta::class)
+                    <li>
+                        <a href="{{ route('encuesta.index') }}" id="administrar-nav-encuesta">
+                            <i class="fa-solid fa-circle"></i><span>Encuestas</span>
                         </a>
                     </li>
                     @endcan

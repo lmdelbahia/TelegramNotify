@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ApiBotController;
 use App\Http\Controllers\Api\PublicationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -20,5 +21,10 @@ use Illuminate\Support\Facades\Route;
 });*/
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::apiResource('publication', PublicationController::class)->except(['index', 'show', 'update', 'destroy']);
+    //Publicaciones
+    Route::post('publish-to-all', [PublicationController::class, 'toAll'])->name('publication.to-all');
+    Route::post('publish-to-bots', [PublicationController::class, 'toBots'])->name('publication.to-bots');
+
+    //Bots
+    Route::apiResource('bots', ApiBotController::class)->except(['store', 'show', 'update', 'destroy']);
 });

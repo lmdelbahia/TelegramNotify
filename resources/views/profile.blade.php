@@ -4,6 +4,7 @@
 @endsection
 
 @section('extra-js')
+<script type="text/javascript" src="{{ asset('js/jquery.formautofill.min.js') }}"></script>
 @endsection
 
 @section('content')
@@ -14,15 +15,9 @@
             <div class="card">
                 <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
 
-                    <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
-                    <h2>Kevin Anderson</h2>
-                    <h3>Web Designer</h3>
-                    <div class="social-links mt-2">
-                        <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
-                        <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
-                        <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
-                        <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
-                    </div>
+                    <img src="{{ asset('img/user-profile.png') }}" alt="Profile" class="rounded-circle">
+                    <h2 id="profile-view-card-name">{{ $user['name'] }}</h2>
+                    <h3>{{ $user['role'] }}</h3>
                 </div>
             </div>
 
@@ -36,63 +31,56 @@
                     <ul class="nav nav-tabs nav-tabs-bordered">
 
                         <li class="nav-item">
-                            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">Overview</button>
+                            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">{{ __('Resumen') }}</button>
                         </li>
 
                         <li class="nav-item">
-                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Edit Profile</button>
+                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">{{ __('Editar Perfil') }}</button>
                         </li>
 
                         <li class="nav-item">
-                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-settings">Settings</button>
-                        </li>
-
-                        <li class="nav-item">
-                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-change-password">Change Password</button>
+                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-change-password">{{ __('Cambiar contraseña') }}</button>
                         </li>
 
                     </ul>
                     <div class="tab-content pt-2">
 
                         <div class="tab-pane fade show active profile-overview" id="profile-overview">
-                            <h5 class="card-title">About</h5>
-                            <p class="small fst-italic">Sunt est soluta temporibus accusantium neque nam maiores cumque temporibus. Tempora libero non est unde veniam est qui dolor. Ut sunt iure rerum quae quisquam autem eveniet perspiciatis odit. Fuga sequi sed ea saepe at unde.</p>
-
-                            <h5 class="card-title">Profile Details</h5>
+                            <h5 class="card-title">{{ __('Detalles del Perfil') }}</h5>
 
                             <div class="row">
-                                <div class="col-lg-3 col-md-4 label ">Full Name</div>
-                                <div class="col-lg-9 col-md-8">Kevin Anderson</div>
+                                <div class="col-lg-3 col-md-4 label ">{{ __('Nombre Completo') }}</div>
+                                <div class="col-lg-9 col-md-8" id="profile-view-summary-name">{{ $user['name'] }}</div>
                             </div>
 
                             <div class="row">
-                                <div class="col-lg-3 col-md-4 label">Company</div>
-                                <div class="col-lg-9 col-md-8">Lueilwitz, Wisoky and Leuschke</div>
+                                <div class="col-lg-3 col-md-4 label">{{ __('Correo') }}</div>
+                                <div class="col-lg-9 col-md-8">{{ $user['email'] }}</div>
                             </div>
 
                             <div class="row">
-                                <div class="col-lg-3 col-md-4 label">Job</div>
-                                <div class="col-lg-9 col-md-8">Web Designer</div>
+                                <div class="col-lg-3 col-md-4 label">{{ __('Rol') }}</div>
+                                <div class="col-lg-9 col-md-8">{{ $user['role'] }}</div>
                             </div>
 
                             <div class="row">
-                                <div class="col-lg-3 col-md-4 label">Country</div>
-                                <div class="col-lg-9 col-md-8">USA</div>
+                                <div class="col-lg-3 col-md-4 label">{{ __('Creado') }}</div>
+                                <div class="col-lg-9 col-md-8">{{ $user['created_at'] }}</div>
                             </div>
 
                             <div class="row">
-                                <div class="col-lg-3 col-md-4 label">Address</div>
-                                <div class="col-lg-9 col-md-8">A108 Adam Street, New York, NY 535022</div>
+                                <div class="col-lg-3 col-md-4 label">{{ __('Modificado') }}</div>
+                                <div class="col-lg-9 col-md-8">{{ $user['updated_at'] }}</div>
                             </div>
 
                             <div class="row">
-                                <div class="col-lg-3 col-md-4 label">Phone</div>
-                                <div class="col-lg-9 col-md-8">(436) 486-3538 x29071</div>
+                                <div class="col-lg-3 col-md-4 label">{{ __('Bots Registrados') }}</div>
+                                <div class="col-lg-9 col-md-8">{{ $user['bots_count'] }}</div>
                             </div>
 
                             <div class="row">
-                                <div class="col-lg-3 col-md-4 label">Email</div>
-                                <div class="col-lg-9 col-md-8">k.anderson@example.com</div>
+                                <div class="col-lg-3 col-md-4 label">{{ __('Noticias Registradas') }}</div>
+                                <div class="col-lg-9 col-md-8">{{ $user['noticias_count'] }}</div>
                             </div>
 
                         </div>
@@ -100,178 +88,62 @@
                         <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
 
                             <!-- Profile Edit Form -->
-                            <form>
+                            <form id="operationForm" name="operationForm" class="needs-validation" novalidate>
+
                                 <div class="row mb-3">
-                                    <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">Profile Image</label>
+                                    <label for="name" class="col-md-4 col-lg-3 col-form-label">{{ __('Nombre Completo') }}</label>
                                     <div class="col-md-8 col-lg-9">
-                                        <img src="assets/img/profile-img.jpg" alt="Profile">
-                                        <div class="pt-2">
-                                            <a href="#" class="btn btn-primary btn-sm" title="Upload new profile image"><i class="bi bi-upload"></i></a>
-                                            <a href="#" class="btn btn-danger btn-sm" title="Remove my profile image"><i class="bi bi-trash"></i></a>
-                                        </div>
+                                        <input type="text" class="form-control" id="name" name="name" maxlength="255" value="{{ $user['name'] }}" required>
                                     </div>
+                                    <div class="invalid-feedback">{{ __('messages.required_field') }}</div>
                                 </div>
 
                                 <div class="row mb-3">
-                                    <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Full Name</label>
+                                    <label for="email" class="col-md-4 col-lg-3 col-form-label">{{ __('Correo') }}</label>
                                     <div class="col-md-8 col-lg-9">
-                                        <input name="fullName" type="text" class="form-control" id="fullName" value="Kevin Anderson">
+                                        <input type="email" class="form-control" id="email" name="email" maxlength="255" value="{{ $user['email'] }}" required>
                                     </div>
-                                </div>
-
-                                <div class="row mb-3">
-                                    <label for="about" class="col-md-4 col-lg-3 col-form-label">About</label>
-                                    <div class="col-md-8 col-lg-9">
-                                        <textarea name="about" class="form-control" id="about" style="height: 100px">Sunt est soluta temporibus accusantium neque nam maiores cumque temporibus. Tempora libero non est unde veniam est qui dolor. Ut sunt iure rerum quae quisquam autem eveniet perspiciatis odit. Fuga sequi sed ea saepe at unde.</textarea>
-                                    </div>
-                                </div>
-
-                                <div class="row mb-3">
-                                    <label for="company" class="col-md-4 col-lg-3 col-form-label">Company</label>
-                                    <div class="col-md-8 col-lg-9">
-                                        <input name="company" type="text" class="form-control" id="company" value="Lueilwitz, Wisoky and Leuschke">
-                                    </div>
-                                </div>
-
-                                <div class="row mb-3">
-                                    <label for="Job" class="col-md-4 col-lg-3 col-form-label">Job</label>
-                                    <div class="col-md-8 col-lg-9">
-                                        <input name="job" type="text" class="form-control" id="Job" value="Web Designer">
-                                    </div>
-                                </div>
-
-                                <div class="row mb-3">
-                                    <label for="Country" class="col-md-4 col-lg-3 col-form-label">Country</label>
-                                    <div class="col-md-8 col-lg-9">
-                                        <input name="country" type="text" class="form-control" id="Country" value="USA">
-                                    </div>
-                                </div>
-
-                                <div class="row mb-3">
-                                    <label for="Address" class="col-md-4 col-lg-3 col-form-label">Address</label>
-                                    <div class="col-md-8 col-lg-9">
-                                        <input name="address" type="text" class="form-control" id="Address" value="A108 Adam Street, New York, NY 535022">
-                                    </div>
-                                </div>
-
-                                <div class="row mb-3">
-                                    <label for="Phone" class="col-md-4 col-lg-3 col-form-label">Phone</label>
-                                    <div class="col-md-8 col-lg-9">
-                                        <input name="phone" type="text" class="form-control" id="Phone" value="(436) 486-3538 x29071">
-                                    </div>
-                                </div>
-
-                                <div class="row mb-3">
-                                    <label for="Email" class="col-md-4 col-lg-3 col-form-label">Email</label>
-                                    <div class="col-md-8 col-lg-9">
-                                        <input name="email" type="email" class="form-control" id="Email" value="k.anderson@example.com">
-                                    </div>
-                                </div>
-
-                                <div class="row mb-3">
-                                    <label for="Twitter" class="col-md-4 col-lg-3 col-form-label">Twitter Profile</label>
-                                    <div class="col-md-8 col-lg-9">
-                                        <input name="twitter" type="text" class="form-control" id="Twitter" value="https://twitter.com/#">
-                                    </div>
-                                </div>
-
-                                <div class="row mb-3">
-                                    <label for="Facebook" class="col-md-4 col-lg-3 col-form-label">Facebook Profile</label>
-                                    <div class="col-md-8 col-lg-9">
-                                        <input name="facebook" type="text" class="form-control" id="Facebook" value="https://facebook.com/#">
-                                    </div>
-                                </div>
-
-                                <div class="row mb-3">
-                                    <label for="Instagram" class="col-md-4 col-lg-3 col-form-label">Instagram Profile</label>
-                                    <div class="col-md-8 col-lg-9">
-                                        <input name="instagram" type="text" class="form-control" id="Instagram" value="https://instagram.com/#">
-                                    </div>
-                                </div>
-
-                                <div class="row mb-3">
-                                    <label for="Linkedin" class="col-md-4 col-lg-3 col-form-label">Linkedin Profile</label>
-                                    <div class="col-md-8 col-lg-9">
-                                        <input name="linkedin" type="text" class="form-control" id="Linkedin" value="https://linkedin.com/#">
-                                    </div>
+                                    <div class="invalid-feedback">{{ __('messages.required_field') }}</div>
                                 </div>
 
                                 <div class="text-center">
-                                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                                    <button type="submit" class="btn btn-primary" id="btnGuardar">
+                                        <span class="spinner-border spinner-border-sm" role="status" id="btnGuardarLoading"></span>{{ __('Guardar') }}
+                                    </button>
                                 </div>
                             </form><!-- End Profile Edit Form -->
 
                         </div>
 
-                        <div class="tab-pane fade pt-3" id="profile-settings">
-
-                            <!-- Settings Form -->
-                            <form>
-
-                                <div class="row mb-3">
-                                    <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Email Notifications</label>
-                                    <div class="col-md-8 col-lg-9">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="changesMade" checked>
-                                            <label class="form-check-label" for="changesMade">
-                                                Changes made to your account
-                                            </label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="newProducts" checked>
-                                            <label class="form-check-label" for="newProducts">
-                                                Information on new products and services
-                                            </label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="proOffers">
-                                            <label class="form-check-label" for="proOffers">
-                                                Marketing and promo offers
-                                            </label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="securityNotify" checked disabled>
-                                            <label class="form-check-label" for="securityNotify">
-                                                Security alerts
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="text-center">
-                                    <button type="submit" class="btn btn-primary">Save Changes</button>
-                                </div>
-                            </form><!-- End settings Form -->
-
-                        </div>
-
                         <div class="tab-pane fade pt-3" id="profile-change-password">
                             <!-- Change Password Form -->
-                            <form>
+                            <form id="passwordForm" name="passwordForm" class="needs-validation" novalidate>
 
                                 <div class="row mb-3">
-                                    <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Current Password</label>
+                                    <label for="password_old" class="col-md-4 col-lg-3 col-form-label">{{ __('Contraseña actual') }}</label>
                                     <div class="col-md-8 col-lg-9">
-                                        <input name="password" type="password" class="form-control" id="currentPassword">
+                                        <input type="password" class="form-control" id="password_old" name="password_old" required>
                                     </div>
                                 </div>
 
                                 <div class="row mb-3">
-                                    <label for="newPassword" class="col-md-4 col-lg-3 col-form-label">New Password</label>
+                                    <label for="password" class="col-md-4 col-lg-3 col-form-label">{{ __('Contraseña nueva') }}</label>
                                     <div class="col-md-8 col-lg-9">
-                                        <input name="newpassword" type="password" class="form-control" id="newPassword">
+                                        <input type="password" class="form-control" id="password" name="password" required>
                                     </div>
                                 </div>
 
                                 <div class="row mb-3">
-                                    <label for="renewPassword" class="col-md-4 col-lg-3 col-form-label">Re-enter New Password</label>
+                                    <label for="password_confirmation" class="col-md-4 col-lg-3 col-form-label">{{ __(' Vuelva a escribir la contraseña nueva') }}</label>
                                     <div class="col-md-8 col-lg-9">
-                                        <input name="renewpassword" type="password" class="form-control" id="renewPassword">
+                                        <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" required>
                                     </div>
                                 </div>
 
                                 <div class="text-center">
-                                    <button type="submit" class="btn btn-primary">Change Password</button>
+                                    <button type="submit" class="btn btn-primary" id="btnChangePasswd">
+                                        <span class="spinner-border spinner-border-sm" role="status" id="btnChangePasswdLoading"></span>{{ __('Cambiar contraseña') }}
+                                    </button>
                                 </div>
                             </form><!-- End Change Password Form -->
 
@@ -285,5 +157,131 @@
         </div>
     </div>
 </section>
+
+<script type="text/javascript">
+    document.title = "{{ __('Perfil de Usuario') }}";
+
+    $(function() {
+        //Spinners de carga
+        $("#btnGuardarLoading").hide();
+        $("#btnChangePasswdLoading").hide();
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+    })
+
+    function Limpiar() {
+        $('#id').val('');
+        $('#passwordForm').trigger("reset");
+        $('#passwordForm').removeClass("was-validated");
+        $('#password_old').val('');
+        $('#password').val('');
+        $('#password_confirmation').val('');
+    }
+
+    function Async_Profile_Update() {
+        $.ajax({
+            data: $('#operationForm').serialize(),
+            type: "POST",
+            dataType: "json",
+            beforeSend: function() {
+                $('#btnGuardar').attr("disabled", true);
+                $("#btnGuardarLoading").show();
+            },
+            complete: function() {
+                $('#btnGuardar').attr("disabled", false);
+                $("#btnGuardarLoading").hide();
+            },
+            url: "{{ route('profile.update') }}",
+            success: function(response) {
+                AlertNotify("success", response.message);
+                $('#app-menu-user-name').html($('#name').val());
+                $('#profile-view-card-name').html($('#name').val());
+                $('#profile-view-summary-name').html($('#name').val());
+            },
+            error: function(xhr) {
+                if (xhr.responseJSON.errors) {
+                    let errores = xhr.responseJSON.errors;
+                    let messaje = "";
+                    for (let key in errores) {
+                        messaje += errores[key];
+                    }
+                    AlertNotify("error", messaje);
+                } else {
+                    AlertNotify("error", xhr.responseJSON.message);
+                }
+            }
+        });
+    }
+
+    function Async_Password_Update() {
+        $.ajax({
+            data: $('#passwordForm').serialize(),
+            type: "POST",
+            dataType: "json",
+            beforeSend: function() {
+                $('#btnChangePasswd').attr("disabled", true);
+                $("#btnChangePasswdLoading").show();
+            },
+            complete: function() {
+                $('#btnChangePasswd').attr("disabled", false);
+                $("#btnChangePasswdLoading").hide();
+            },
+            url: "{{ route('profile.change-password') }}",
+            success: function(response) {
+                Limpiar();
+                AlertNotify("success", response.message);
+            },
+            error: function(xhr) {
+                if (xhr.responseJSON.errors) {
+                    let errores = xhr.responseJSON.errors;
+                    let messaje = "";
+                    for (let key in errores) {
+                        messaje += errores[key];
+                    }
+                    AlertNotify("error", messaje);
+                } else {
+                    AlertNotify("error", xhr.responseJSON.message);
+                }
+            }
+        });
+    }
+
+    // Deshabilita Form Submit en casi de campo no válido
+    (function() {
+        'use strict';
+        window.addEventListener('load', function() {
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function(form) {
+                if (form.id == "operationForm") {
+                    form.addEventListener('submit', function(event) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        if (form.checkValidity()) {
+                            Async_Profile_Update();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                }
+                if (form.id == "passwordForm") {
+                    form.addEventListener('submit', function(event) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        if (form.checkValidity()) {
+                            Async_Password_Update();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                }
+
+            });
+        }, false);
+    })();
+</script>
 
 @endsection

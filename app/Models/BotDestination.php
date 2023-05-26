@@ -31,4 +31,9 @@ class BotDestination extends Model
     {
         return $this->belongsToMany(Noticia::class);
     }
+
+    public function encuestas(): BelongsToMany
+    {
+        return $this->belongsToMany(Encuesta::class);
+    }
 }

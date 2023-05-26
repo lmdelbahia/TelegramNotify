@@ -24,7 +24,7 @@ class UserTokenController extends Controller
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
 
-                    $btn = ' <a onClick="Async_Delete(this)" data-id="' . $row->id . '" data-type="delete" class="btn btn-danger btn-sm" title="' . __('Eliminar') . '"><i class="fa-solid fa-trash"></i></a>';
+                    $btn = ' <a onClick="Async_Delete(this)" data-id="' . $row->id . '" data-name="' . $row->name . '" data-type="delete" class="btn btn-danger btn-sm" title="' . __('Eliminar') . '"><i class="fa-solid fa-trash"></i></a>';
 
                     return $btn;
                 })

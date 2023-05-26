@@ -8,7 +8,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
-class StoreNoticiaRequest extends FormRequest
+class StoreEncuestaRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -37,7 +37,7 @@ class StoreNoticiaRequest extends FormRequest
 
         return [
             'titulo' => ['required', 'string', 'max:80'],
-            'contenido' => ['required', 'string'],
+            'opciones' => ['required', 'string'],
             'botDestinations' => ['sometimes', 'array'],
             'botDestinations.*' => [
                 'sometimes',

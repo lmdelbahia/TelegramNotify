@@ -14,10 +14,11 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 
-class ApiPublicationJob
+class ApiPublishToAllJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -41,17 +42,25 @@ class ApiPublicationJob
     {
         foreach ($this->user->bots as $bot) {
             foreach ($bot->botDestinations as $botDestination) {
-                Notification::route('telegram', $botDestination->identifier)
-                    ->notify(new TelegramMessageNotify($bot, new Noticia([
-                        'titulo' => $this->publication->titulo,
-                        'contenido' => $this->publication->contenido
-                    ])));
+                try {
+                    Notification::route('telegram', $botDestination->identifier)
+                        ->notify(new TelegramMessageNotify($bot, new Noticia([
+                            'titulo' => $this->publication->titulo,
+                            'contenido' => $this->publication->contenido
+                        ])));
+                } catch (\Throwable $th) {
+                    Log::error($th);
+                }
 
-                Notification::route('telegram', $botDestination->identifier)
-                    ->notify(new TelegramPhotoNotify($bot, new NoticiaImagen([
-                        'descripcion' => $this->publication->titulo,
-                        'path' => $this->publication->image_path
-                    ])));
+                try {
+                    Notification::route('telegram', $botDestination->identifier)
+                        ->notify(new TelegramPhotoNotify($bot, new NoticiaImagen([
+                            'descripcion' => $this->publication->titulo,
+                            'path' => $this->publication->image_path
+                        ])));
+                } catch (\Throwable $th) {
+                    Log::error($th);
+                }
             }
 
             Storage::delete($this->publication->image_path);
