@@ -39,13 +39,12 @@ Cree su entorno de producción a partir de una pila LAMP. Luego de configurado e
 - Ejecutar php artisan migrate.
 - Ejecutar php artisan db:seed --class=InitialDataSeeder. El usuario por defecto es admintelnotify@example.com con passwd admin*2023
 - En este momento puede verificar que la aplicación se ejecuta.
-- Configure cron en su sistema: * * * * * cd /path-to-your-project && php artisan schedule:run >> /dev/null 2>&1
 - Instale supervisor para el control de la ejecucion de tareas(Queue): sudo apt-get install supervisor
 - Cree un fichero de configuración para su proyecto en /etc/supervisor/conf.d/config-name.conf
 - Edite el fichero con la siguiente información:  
 [program:name-ofworker]  
 process_name=%(program_name)s_%(process_num)02d  
-command=php /var/www/app.com/artisan queue:work sqs --sleep=3 --tries=3 --max-time=3600  
+command=php /var/www/app.com/artisan queue:work --sleep=3 --tries=3 --max-time=3600  
 autostart=true  
 autorestart=true  
 stopasgroup=true  
