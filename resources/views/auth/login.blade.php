@@ -12,7 +12,7 @@
 
                         <div class="d-flex justify-content-center py-4">
                             <a href="{{ route('home') }}" class="logo d-flex align-items-center w-auto">
-                                <img src="{{ asset('template/img/logo.png') }}" alt="">
+                                <img src="{{ asset('img/logo64x78.png') }}" alt="">
                                 <span class="d-none d-lg-block">{{ config('app.name', 'Telegram Notify') }}</span>
                             </a>
                         </div><!-- End Logo -->
