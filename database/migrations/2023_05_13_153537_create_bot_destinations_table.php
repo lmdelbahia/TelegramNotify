@@ -12,8 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('bot_destinations', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('bot_id')->constrained()->cascadeOnDelete();
+            $table->uuid('id');
+            $table->primary('id');
+            $table->foreignUuid('bot_id')->references('id')->on('bots')->cascadeOnDelete();
             $table->string('name', 50);
             $table->string('identifier');
             $table->timestamps();

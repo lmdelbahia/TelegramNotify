@@ -22,7 +22,7 @@ class StoreBotDestinationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'bot_id' => ['required', 'integer', 'exists:bots,id'],
+            'bot_id' => ['required', 'uuid', 'exists:bots,id'],
             'name' => ['required', 'string', 'max:50'],
             'identifier' => ['required', 'string', 'max:250']
         ];

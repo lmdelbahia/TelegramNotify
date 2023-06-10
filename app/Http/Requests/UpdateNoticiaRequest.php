@@ -41,7 +41,7 @@ class UpdateNoticiaRequest extends FormRequest
             'botDestinations' => ['sometimes', 'array'],
             'botDestinations.*' => [
                 'sometimes',
-                'integer',
+                'uuid',
                 Rule::in($userDestinations)
             ]
         ];

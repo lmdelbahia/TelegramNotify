@@ -32,7 +32,7 @@ class PublishToBotsRequest extends FormRequest
             'bots' => ['required', 'array'],
             'bots.*' => [
                 'required',
-                'integer',
+                'uuid',
                 Rule::exists('bots', 'id')->where('user_id', $userId)
             ]
         ];

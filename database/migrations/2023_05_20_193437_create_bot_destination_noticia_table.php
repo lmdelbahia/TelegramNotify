@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('bot_destination_noticia', function (Blueprint $table) {
             $table->foreignId('noticia_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('bot_destination_id')->constrained()->cascadeOnDelete();
+            $table->foreignUuid('bot_destination_id')->references('id')->on('bot_destinations')->cascadeOnDelete();
         });
     }
 

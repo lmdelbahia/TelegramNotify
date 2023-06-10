@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->group(function () {
     //Publicaciones
-    Route::post('publish-to-all', [PublicationController::class, 'toAll'])->name('publication.to-all');
+    //Route::post('publish-to-all', [PublicationController::class, 'toAll'])->name('publication.to-all');
     Route::post('publish-to-bots', [PublicationController::class, 'toBots'])->name('publication.to-bots');
 
     //Bots
