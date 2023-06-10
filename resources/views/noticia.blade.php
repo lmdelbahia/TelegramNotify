@@ -52,7 +52,7 @@
 
 <!-- Modal Operations -->
 <div class="modal fade" id="operationDialog" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="operationDialogTitle" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <form id="operationForm" name="operationForm" class="needs-validation" novalidate>
                 <div class="modal-header">
