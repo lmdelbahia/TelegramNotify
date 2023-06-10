@@ -51,24 +51,12 @@ class TelegramMessageNotify extends Notification
 
     public function toTelegram($notifiable)
     {
-        return TelegramMessage::create()
-            ->token($this->bot->token)
-            ->line("*{$this->noticia->titulo}:*")
-            ->line($this->noticia->contenido);
+        $telMessage = TelegramMessage::create()->token($this->bot->token);
 
-        /*$imagenes = $this->noticia->imagenes;
-        if ($imagenes->count()) {
+        if ($this->noticia->titulo) $telMessage->line("*{$this->noticia->titulo}:*");
+        if ($this->noticia->contenido) $telMessage->line($this->noticia->contenido);
 
-            $imagesOk = $imagenes->map(function ($item) {
-                return Storage::disk('public')->exists($item->path);
-            });
-
-            return $telegramFile = TelegramFile::create()
-                ->token($this->bot->token)
-                ->content('*' . $this->noticia->titulo . ':* ' . $this->noticia->contenido)
-                ->photo(public_path() . $item->path); // local photo;
-        } else {
-        }*/
+        return $telMessage;
     }
 
     /**

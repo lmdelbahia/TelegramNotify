@@ -26,9 +26,9 @@ class PublishToBotsRequest extends FormRequest
         $userId = Auth::id();
 
         return [
-            'titulo' => ['required', 'string', 'max:80'],
-            'contenido' => ['required', 'string'],
-            'image' => ['required', 'image'],
+            'titulo' => ['sometimes', 'nullable', 'string', 'max:80'],
+            'contenido' => ['sometimes', 'nullable', 'string'],
+            'image' => ['sometimes', 'nullable', 'image'],
             'bots' => ['required', 'array'],
             'bots.*' => [
                 'required',

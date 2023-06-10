@@ -26,5 +26,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('publish-to-bots', [PublicationController::class, 'toBots'])->name('publication.to-bots');
 
     //Bots
-    Route::apiResource('bots', ApiBotController::class)->except(['store', 'show', 'update', 'destroy']);
+    //Route::apiResource('bots', ApiBotController::class)->except(['store', 'show', 'update', 'destroy']);
 });

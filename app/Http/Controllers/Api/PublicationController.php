@@ -22,7 +22,7 @@ class PublicationController extends Controller
 {
 
     #[Endpoint('Publish to all', 'Publica contenido en todos los Bots y sus respectivos destinos')]
-    #[BodyParam('contenido', 'string', "Puede usar Markdown para el formato del contenido, ejemplo: <br/><strong>*bold text*</strong><br/><em>_italic text_</em><br/>[text] (URL)<br>`inline fixed-width code`<br/>```pre-formatted fixed-width code block```")]
+    #[BodyParam('contenido', 'string', "Puede usar Markdown para el formato del contenido, ejemplo: <br/><strong>*bold text*</strong><br/><em>_italic text_</em><br/>[text] (URL)<br>`inline fixed-width code`<br/>```pre-formatted fixed-width code block```", false)]
     #[Response(['message' => 'Su contenido se ha puesto en la cola de salida'])]
     public function toAll(PublishToAllRequest $request)
     {
@@ -40,11 +40,15 @@ class PublicationController extends Controller
     }
 
     #[Endpoint('Publish to Bots', 'Publica contenido en todos los Bots seleccionados y sus respectivos destinos')]
-    #[BodyParam('contenido', 'string', "Puede usar Markdown para el formato del contenido, ejemplo: <br/><strong>*bold text*</strong><br/><em>_italic text_</em><br/>[text] (URL)<br>`inline fixed-width code`<br/>```pre-formatted fixed-width code block```")]
+    #[BodyParam('contenido', 'string', "Puede usar Markdown para el formato del contenido, ejemplo: <br/><strong>*bold text*</strong><br/><em>_italic text_</em><br/>[text] (URL)<br>`inline fixed-width code`<br/>```pre-formatted fixed-width code block```", false)]
     #[Response(['message' => 'Su contenido se ha puesto en la cola de salida'])]
     public function toBots(PublishToBotsRequest $request)
     {
-        $path = $request->image->store('public/publications');
+        $path = null;
+
+        if ($request->hasFile('image')) {
+            $path = $request->image->store('public/publications');
+        }
 
         $publication = Publication::create([
             'titulo' => $request->titulo,

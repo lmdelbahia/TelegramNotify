@@ -44,28 +44,33 @@ class ApiPublishToBotsJob implements ShouldQueue
         foreach ($this->bots as $item) {
             $bot = Bot::Find($item);
             foreach ($bot->botDestinations as $botDestination) {
-                try {
-                    Notification::route('telegram', $botDestination->identifier)
-                        ->notify(new TelegramMessageNotify($bot, new Noticia([
-                            'titulo' => $this->publication->titulo,
-                            'contenido' => $this->publication->contenido
-                        ])));
-                } catch (\Throwable $th) {
-                    Log::error($th);
+                if (!empty($this->publication->titulo) || !empty($this->publication->contenido)) {
+                    try {
+                        Notification::route('telegram', $botDestination->identifier)
+                            ->notify(new TelegramMessageNotify($bot, new Noticia([
+                                'titulo' => $this->publication->titulo,
+                                'contenido' => $this->publication->contenido
+                            ])));
+                    } catch (\Throwable $th) {
+                        Log::error($th);
+                    }
                 }
 
-                try {
-                    Notification::route('telegram', $botDestination->identifier)
-                        ->notify(new TelegramPhotoNotify($bot, new NoticiaImagen([
-                            'descripcion' => $this->publication->titulo,
-                            'path' => $this->publication->image_path
-                        ])));
-                } catch (\Throwable $th) {
-                    Log::error($th);
+                if (!empty($this->publication->image_path)) {
+                    try {
+                        Notification::route('telegram', $botDestination->identifier)
+                            ->notify(new TelegramPhotoNotify($bot, new NoticiaImagen([
+                                'descripcion' => $this->publication->titulo,
+                                'path' => $this->publication->image_path
+                            ])));
+                    } catch (\Throwable $th) {
+                        Log::error($th);
+                    }
                 }
             }
 
-            Storage::delete($this->publication->image_path);
+            if (!empty($this->publication->image_path))
+                Storage::delete($this->publication->image_path);
             $this->publication->delete();
         }
     }
